@@ -249,6 +249,80 @@ modify_user() {
         print_warning "No changes were made to user '$username'"
     fi
 }
+# Function to display all inbounds
+show_all_inbounds() {
+    echo -e "\n                   ${BLUE}=== Inbounds List ===${NC}\n"
+    # Print table header
+    echo -e "${BLUE}|-------------------------------------------------------------|${NC}"
+    echo -e "${BLUE}|${NC} ${MAGENTA}ID${BLUE}  |${NC} UserID ${BLUE}|${NC} Remark               ${BLUE}|${NC} Port     ${BLUE}|${NC} Protocol   ${BLUE}|${NC}"
+    echo -e "${BLUE}|-------------------------------------------------------------|${NC}"
+    
+    # Fetch and display all inbounds
+    sqlite3 "$DB_PATH" "SELECT id, user_id, remark, port, protocol FROM inbounds;" | \
+    while IFS='|' read -r id user_id remark port protocol; do
+        printf "${BLUE}|${NC} ${MAGENTA}%-4s${BLUE}|${NC} %-6s ${BLUE}|${NC} %-20s ${BLUE}|${NC} %-8s ${BLUE}|${NC} %-10s ${BLUE}|${NC}\n" \
+        "$id" "$user_id" "$remark" "$port" "$protocol"
+        echo -e "${BLUE}|-------------------------------------------------------------|${NC}"
+    done
+    
+    # Print total inbounds count
+    echo -e "${BLUE}Total inbounds : ${MAGENTA}$inbound_count${NC}"
+}
+
+# Function to change the user_id of an inbound
+change_inbound_user() {
+    check_db
+    inbound_count=$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM inbounds;")
+    
+    if [ "$inbound_count" -eq 0 ]; then
+        print_warning "No inbound found in the database."
+        sleep 3
+        return 1
+    fi
+    # Show all inbounds
+    show_all_inbounds
+
+    # Validate inbound ID is an integer
+    while true; do
+        read -p "Enter the ID of inbound to change: " inbound_id
+        if [[ "$inbound_id" =~ ^[0-9]+$ ]]; then
+            # Check if the inbound exists
+            inbound_exists=$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM inbounds WHERE id=$inbound_id;")
+            if [ "$inbound_exists" -eq 0 ]; then
+                print_error "No inbound found with ID $inbound_id."
+            else
+                break
+            fi
+        else
+            print_error "Inbound ID must be a valid integer. Please try again."
+        fi
+    done
+
+    # Validate new user ID is an integer
+    while true; do
+        read -p "Enter the new user ID to assign to the inbound: " new_user_id
+        if [[ "$new_user_id" =~ ^[0-9]+$ ]]; then
+            # Check if the new user exists
+            user_exists=$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM users WHERE id=$new_user_id;")
+            if [ "$user_exists" -eq 0 ]; then
+                print_error "No user found with ID $new_user_id."
+            else
+                break
+            fi
+        else
+            print_error "User ID must be a valid integer. Please try again."
+        fi
+    done
+
+    # Update the user_id of the selected inbound
+    if sqlite3 "$DB_PATH" "UPDATE inbounds SET user_id='$new_user_id' WHERE id=$inbound_id;" 2>/dev/null; then
+        print_success "Inbound $inbound_id successfully assigned to user ID $new_user_id."
+    else
+        print_error "Failed to update the inbound."
+        return 1
+    fi
+    press_enter
+}
 
 # Trap Ctrl+C and other signals
 trap 'echo -e "\n${YELLOW}Script interrupted${NC}"; exit 1' SIGINT SIGTERM
@@ -271,15 +345,17 @@ while true; do
     echo "1) Add a user"
     echo "2) Remove a user"
     echo "3) Modify a user"
-    echo "4) Exit"
-    read -p "Enter choice [1-4]: " choice
+    echo "4) Modify users inbound"
+    echo "5) Exit"
+    read -p "Enter choice [1-5]: " choice
     echo
 
     case $choice in
         1) add_user ;;
         2) remove_user ;;
         3) modify_user ;;
-        4) print_success "Exiting..."; exit 0 ;;
+        4) change_inbound_user ;;
+        5) print_success "Exiting..."; exit 0 ;;
         *) print_error "Invalid option. Please try again." ;;
     esac
 done
