@@ -102,21 +102,21 @@ show_users() {
         echo -e "${BLUE}|------------------------------------------------------------------|${NC}"
     else
         # Print table header
-        echo -e "${BLUE}|----------------------------------------------------------------|${NC}"
-        echo -e "${BLUE}|${NC} ${MAGENTA}UserID${BLUE} |${NC} Username           ${BLUE}|${NC} Password                  ${BLUE}|${NC} Is Sudo  ${BLUE}|${NC}"
-        echo -e "${BLUE}|----------------------------------------------------------------|${NC}"
+        echo -e "${BLUE}|-------------------------------------------------------------------|${NC}"
+        echo -e "${BLUE}|${NC} ${MAGENTA}UserID${BLUE} |${NC} Username           ${BLUE}|${NC} Password                  ${BLUE}|${NC} Is Sudo ${BLUE}|${NC}"
+        echo -e "${BLUE}|-------------------------------------------------------------------|${NC}"
         
         # Fetch and display user data with proper color handling
         while IFS='|' read -r id username password is_sudo; do
             # Print each row with formatting and direct color codes
             if [ "$is_sudo" -eq 1 ]; then
-                printf "${BLUE}|${NC} ${MAGENTA}%-3s${BLUE}|${NC} %-18s ${BLUE}|${NC} %-25s ${BLUE}|${NC} ${GREEN}%-8s${NC} ${BLUE}|${NC}\n" \
+                printf "${BLUE}|${NC}   ${MAGENTA}%-5s${BLUE}|${NC} %-18s ${BLUE}|${NC} %-25s ${BLUE}|${NC} ${GREEN}%-8s${NC}${BLUE}|${NC}\n" \
                        "$id" "$username" "$password" "Yes"
             else
-                printf "${BLUE}|${NC} ${MAGENTA}%-3s${BLUE}|${NC} %-18s ${BLUE}|${NC} %-25s ${BLUE}|${NC} ${RED}%-8s${NC} ${BLUE}|${NC}\n" \
+                printf "${BLUE}|${NC}   ${MAGENTA}%-5s${BLUE}|${NC} %-18s ${BLUE}|${NC} %-25s ${BLUE}|${NC} ${RED}%-8s${NC}${BLUE}|${NC}\n" \
                        "$id" "$username" "$password" "No"
             fi
-            echo -e "${BLUE}|----------------------------------------------------------------|${NC}"
+            echo -e "${BLUE}|-------------------------------------------------------------------|${NC}"
         done < <(sqlite3 "$DB_PATH" "SELECT id, username, password, is_sudo FROM users;")
         
         # Print total users
