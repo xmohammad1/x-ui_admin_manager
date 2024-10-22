@@ -12,6 +12,9 @@ BLUE='\033[0;34m'
 MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
+# Required tools
+REQUIRED_TOOLS=("sqlite3" "curl")
+
 # Function to print error messages
 print_error() {
     echo -e "${RED}Error: $1${NC}" >&2
@@ -25,6 +28,25 @@ print_success() {
 # Function to print warnings
 print_warning() {
     echo -e "${YELLOW}Warning: $1${NC}"
+}
+# Function to check if a tool is installed
+check_tool() {
+    local tool="$1"
+    if ! command -v "$tool" >/dev/null 2>&1; then
+        print_warning "$tool is not installed. Installing..."
+        if apt-get install -y "$tool"; then
+            print_success "$tool installed successfully."
+        else
+            print_error "Failed to install $tool. Please install it manually."
+            exit 1
+        fi
+    fi
+}
+# Check for required tools
+check_requirements() {
+    for tool in "${REQUIRED_TOOLS[@]}"; do
+        check_tool "$tool"
+    done
 }
 
 # Function to validate database connection
@@ -236,6 +258,8 @@ if [ "$EUID" -ne 0 ]; then
     print_error "This script must be run as root"
     exit 1
 fi
+# Check and install requirements
+check_requirements
 press_enter() {
     echo -ne "${GREEN}Press Enter to continue...${NC}"
     read
@@ -255,7 +279,7 @@ while true; do
         1) add_user ;;
         2) remove_user ;;
         3) modify_user ;;
-        0) print_success "Exiting..."; exit 0 ;;
+        4) print_success "Exiting..."; exit 0 ;;
         *) print_error "Invalid option. Please try again." ;;
     esac
 done
