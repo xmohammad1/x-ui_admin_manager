@@ -338,6 +338,7 @@ press_enter() {
     echo -ne "${GREEN}Press Enter to continue...${NC}"
     read
 }
+clear
 # Menu for user options
 while true; do
     show_users
