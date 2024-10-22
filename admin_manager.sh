@@ -260,7 +260,7 @@ show_all_inbounds() {
     # Fetch and display all inbounds
     sqlite3 "$DB_PATH" "SELECT id, user_id, remark, port, protocol FROM inbounds;" | \
     while IFS='|' read -r id user_id remark port protocol; do
-        printf "${BLUE}|${NC} ${MAGENTA}%-4s${BLUE}|${NC} %-6s ${BLUE}|${NC} %-20s ${BLUE}|${NC} %-8s ${BLUE}|${NC} %-10s ${BLUE}|${NC}\n" \
+        printf "${BLUE}|${NC} ${MAGENTA}%-4s${BLUE}|${NC}  %-6s${BLUE}|${NC} %-20s ${BLUE}|${NC} %-8s ${BLUE}|${NC} %-10s ${BLUE}|${NC}\n" \
         "$id" "$user_id" "$remark" "$port" "$protocol"
         echo -e "${BLUE}|-------------------------------------------------------------|${NC}"
     done
