@@ -103,7 +103,7 @@ show_users() {
     else
         # Print table header
         echo -e "${BLUE}|----------------------------------------------------------------|${NC}"
-        echo -e "${BLUE}|${NC} ${MAGENTA}ID${BLUE} |${NC} Username           ${BLUE}|${NC} Password                  ${BLUE}|${NC} Is Sudo  ${BLUE}|${NC}"
+        echo -e "${BLUE}|${NC} ${MAGENTA}UserID${BLUE} |${NC} Username           ${BLUE}|${NC} Password                  ${BLUE}|${NC} Is Sudo  ${BLUE}|${NC}"
         echo -e "${BLUE}|----------------------------------------------------------------|${NC}"
         
         # Fetch and display user data with proper color handling
