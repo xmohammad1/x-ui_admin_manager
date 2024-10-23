@@ -141,7 +141,8 @@ add_user() {
     read -p "Enter password: " password
 
     while true; do
-        read -p "Is the user sudo? (1 for yes, 0 for no): " is_sudo
+        read -p "Is the user sudo? (1 for yes, 0 for no) [default: 0]: " is_sudo
+        is_sudo=${is_sudo:-0}
         if [[ "$is_sudo" =~ ^[0-1]$ ]]; then
             break
         fi
