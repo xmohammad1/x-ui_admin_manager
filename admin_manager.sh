@@ -274,6 +274,7 @@ change_inbound_user() {
         sleep 3
         return 1
     fi
+    echo -e "                   ${BLUE}=== Admins List ===${NC}"
     show_users
     echo -e "                   ${BLUE}=== Inbounds List ===${NC}"
     show_all_inbounds
