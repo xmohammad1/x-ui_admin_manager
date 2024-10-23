@@ -91,8 +91,6 @@ user_exists() {
 # Function to display all users
 show_users() {
     check_db
-    echo -e "\n            ${BLUE}=== X-UI User Admin Management System ===${NC}\n"
-
     # Get the count of users
     user_count=$(sqlite3 "$DB_PATH" "SELECT COUNT(*) FROM users;")
     
@@ -277,6 +275,7 @@ change_inbound_user() {
         sleep 3
         return 1
     fi
+    show_users
     # Show all inbounds
     show_all_inbounds
 
@@ -339,6 +338,7 @@ press_enter() {
 clear
 # Menu for user options
 while true; do
+    echo -e "\n            ${BLUE}=== X-UI User Admin Management System ===${NC}\n"
     show_users
     echo -e "\n${GREEN}User Admin Management Menu${NC}"
     echo "1) Add a user"
