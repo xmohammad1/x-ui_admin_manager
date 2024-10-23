@@ -268,9 +268,9 @@ change_inbound_user() {
         sleep 3
         return 1
     fi
-    echo -e "          ${BLUE}=== Admins List , ${BLUE}Total users: ${MAGENTA}$user_count${NC}===${NC}"
+    echo -e "          ${BLUE}=== 👥 Admins List , ${GREEN}Total${BLUE} users: ${MAGENTA}$user_count${BLUE} ===${NC}"
     show_users
-    echo -e "             ${BLUE}=== Inbounds List , ${BLUE}Total inbounds : ${MAGENTA}$inbound_count${NC}===${NC}"
+    echo -e "          ${BLUE}=== 📊 Inbounds List , ${GREEN}Total${BLUE} inbounds: ${MAGENTA}$inbound_count${BLUE} ===${NC}"
     show_all_inbounds
 
     # Validate inbound ID is an integer
