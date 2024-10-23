@@ -189,9 +189,6 @@ modify_user() {
     check_db
     
     read -p "Enter the username to modify: " username
-    if ! validate_username "$username"; then
-        return 1
-    fi
 
     if user_exists "$username"; then
         print_error "User '$username' does not exist"
