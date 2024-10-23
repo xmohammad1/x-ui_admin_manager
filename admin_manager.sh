@@ -247,7 +247,6 @@ modify_user() {
 }
 # Function to display all inbounds
 show_all_inbounds() {
-    echo -e "\n                   ${BLUE}=== Inbounds List ===${NC}\n"
     # Print table header
     echo -e "${BLUE}|-------------------------------------------------------------|${NC}"
     echo -e "${BLUE}|${NC} ${MAGENTA}ID${BLUE}  |${NC} UserID ${BLUE}|${NC} Remark               ${BLUE}|${NC} Port     ${BLUE}|${NC} Protocol   ${BLUE}|${NC}"
@@ -276,7 +275,7 @@ change_inbound_user() {
         return 1
     fi
     show_users
-    # Show all inbounds
+    echo -e "                   ${BLUE}=== Inbounds List ===${NC}"
     show_all_inbounds
 
     # Validate inbound ID is an integer
