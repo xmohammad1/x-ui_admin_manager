@@ -116,9 +116,6 @@ show_users() {
             fi
             echo -e "${BLUE}|-------------------------------------------------------------------|${NC}"
         done < <(sqlite3 "$DB_PATH" "SELECT id, username, password, is_sudo FROM users;")
-        
-        # Print total users
-        echo -e "${BLUE}Total users: ${MAGENTA}$user_count${NC}"
     fi
 }
 # Function to add a new user
@@ -259,9 +256,6 @@ show_all_inbounds() {
         "$id" "$user_id" "$remark" "$port" "$protocol"
         echo -e "${BLUE}|-------------------------------------------------------------|${NC}"
     done
-    
-    # Print total inbounds count
-    echo -e "${BLUE}Total inbounds : ${MAGENTA}$inbound_count${NC}"
 }
 
 # Function to change the user_id of an inbound
@@ -274,9 +268,9 @@ change_inbound_user() {
         sleep 3
         return 1
     fi
-    echo -e "                   ${BLUE}=== Admins List ===${NC}"
+    echo -e "          ${BLUE}=== Admins List , ${BLUE}Total users: ${MAGENTA}$user_count${NC}===${NC}"
     show_users
-    echo -e "                   ${BLUE}=== Inbounds List ===${NC}"
+    echo -e "             ${BLUE}=== Inbounds List , ${BLUE}Total inbounds : ${MAGENTA}$inbound_count${NC}===${NC}"
     show_all_inbounds
 
     # Validate inbound ID is an integer
